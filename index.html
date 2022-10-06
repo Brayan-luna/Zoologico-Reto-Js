@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <link rel="stylesheet" href="styless.css">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+  <header class="header">
+    <nav class="navbar navbar-expand-lg colorNav">
+      <div class="container-fluid">
+        <img src="imgs/icon.png" alt="" class="iconHeader">
+        <a class="nav-link colorWhite texteDecoratingNone">Zoologico Nelumbo</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          </ul>
+          <form class="d-flex searchForm" role="search">
+            <input class="form-control me-2 searchHeader" type="search" placeholder="Search" aria-label="Search">
+            <button class="colorButton" type="submit">Buscar</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <aside class="aside">
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark divAside">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <svg class="bi pe-none me-2" width="40" height="32">
+          <use xlink:href="#bootstrap"></use>
+        </svg>
+        <span class="fs-4">Zonas</span>
+      </a>
+      <hr>
+      <ul class="nav nav-pills flex-column mb-auto" id="ulZonas">
+      
+      </ul>
+      <hr>
+      <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://i.pinimg.com/564x/50/28/bb/5028bbc38cf24b36333b461974b96e81.jpg" alt="" width="32"
+            height="32" class="rounded-circle me-2">
+          <strong>mdo</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+          <li><a href="#" class="dropdown-item " id="BuzonMensajes">Mensajes</a></li>
+          <li><a href="#" class="dropdown-item " id="CrearMensajes">Crear mensaje</a></li>
+          <li><a href="#" class="dropdown-item " id="crearZona">Agregar Zona</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" href="#">Sign out</a></li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+  <main class="main" id="main">
+     <!-- comentarios -->
+     <section class="sectionMensajes" id="sectionMensajes">
+
+    </section>
+    <section class="sectionListEspecies" id="sectionListEspecies">
+   
+    </section>
+    <!-- formulario -->
+    <section class="sectionForm" id="sectionForm">
+      <div class="modal-content rounded-4 shadow divFormContainer">
+        <div class="modal-header p-5 pb-4 border-bottom-0">
+          <!-- <h1 class="modal-title fs-5" >Modal title</h1> -->
+          <h1 class="fw-bold mb-0 fs-2 colorWhite" id="h1Formulario">Agrega Tu Comentario</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-5 pt-0">
+          <form class="formulario" id="formulario">
+            <div class="form-floating mb-3">
+              <input class="form-control rounded-3" id="inputNombreMenj" placeholder="name@example.com">
+              <label for="inputNombreMenj">Nombre</label>
+            </div>
+            <div class="form-floating mb-3">
+              <textarea class="form-control textAreaComentario" id="inputContenidoMenj"
+                placeholder="Password"></textarea>
+              <label for="inputContenidoMenj" id="labelElevar">Comentario</label>
+            </div>
+            <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">Sign up</button>
+          </form>
+        </div>
+      </div>
+    </section>
+   
+  </main>
+  <footer>
+
+  </footer>
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>

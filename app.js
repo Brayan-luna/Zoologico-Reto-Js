@@ -3,8 +3,8 @@ let arrayBuzonMensajes = [];
 let arrayComentarios = [];
 let arrayZonas = [];
 let cambioFormulario = "";
+let nombreZona = 0;
 let nombreEspecie = 0;
-let especieAnimal = 0;
 
 let enums = {
     formComentario: "comentario",
@@ -12,6 +12,14 @@ let enums = {
     formEspecie: "especie",
     formAnimales: "animales",
 }
+// funtion crear id
+function newId() {
+    let lastId = localStorage.getItem("Id") || "-1";
+    let newLasId = JSON.parse(lastId) + 1;
+    localStorage.setItem("Id", JSON.stringify(newLasId));
+    return newLasId;
+}
+
 //formulario Mensaje
 let formularioMensaj = document.getElementById('formulario');
 formularioMensaj.addEventListener('submit', submitForm);
@@ -29,9 +37,17 @@ let botonCrearZonas = document.getElementById('crearZona');
 botonCrearZonas.addEventListener('click', formularioZonas)
 
 //funciones
+function crearZonas(nombreZona, id) {
+    let zonaAnimal = {
+        Zona: nombreZona,
+        Id: id,
 
+    }
+    arrayZonas.push(zonaAnimal)
+    guardarZonas()
+}
 function submitForm(e) {
-    e.preventDefault;
+    e.preventDefault();
     if (cambioFormulario === enums.formComentario) {
         let nombreMensaj = document.getElementById('inputNombreMenj').value;
         let contenidoMensaj = document.getElementById('inputContenidoMenj').value;
@@ -43,28 +59,28 @@ function submitForm(e) {
         arrayBuzonMensajes.push(comentarioNuevo)
         formularioMensaj.reset()
         guardarMensaje()
+
     }
 
-    if (cambioFormulario === enums.formZona) {
+    else if (cambioFormulario === enums.formZona) {
         let nombreZona = document.getElementById('inputNombreMenj').value;
-        let zonaAnimal = {
-            nombreZona: nombreZona,
-        }
-        arrayZonas.push(zonaAnimal)
+        let id = newId()
+        crearZonas(nombreZona, id)
         formularioMensaj.reset()
         guardarZonas()
         imprimirZonas()
 
     }
-    if (cambioFormulario === enums.formEspecie) {
+    else if (cambioFormulario === enums.formEspecie) {
         let nombreEspecie = document.getElementById('inputNombreMenj').value;
-        agregarEspecie(nombreEspecie)
+        agregarEspecies(nombreEspecie)
         formularioMensaj.reset()
     }
-    if(cambioFormulario === enums.formAnimales){
+    else if (cambioFormulario === enums.formAnimales) {
         let nombreAnimal = document.getElementById('inputNombreMenj').value;
         agregarAnimales(nombreAnimal)
         formularioMensaj.reset()
+
     }
 
 }
@@ -135,6 +151,7 @@ function eliminarMensaje(e) {
     localStorage.setItem("Mensajes", JSON.stringify(newDatosMensajes))
 
 }
+
 //zonas
 function guardarZonas() {
     localStorage.setItem("Zonas", JSON.stringify(arrayZonas))
@@ -151,14 +168,13 @@ function imprimirZonas() {
             let botonZona = document.createElement('button');
             let botonVerEspecies = document.createElement('button');
             botonVerEspecies.addEventListener('click', imprimirEspecies)
+            botonZona.addEventListener('click', formEspecie)
             let liZonas = document.createElement('li');
             //dar clases 
-
             botonVerEspecies.textContent = "Esp"
             botonVerEspecies.className = "btn btn-primary btonEspecie"
             botonZona.className = "btn btn-primary btonZona"
-            botonZona.textContent = element.nombreZona
-            botonZona.addEventListener("click", formEspecie)
+            botonZona.textContent = element.Zona
             ulZonas.insertAdjacentElement("beforeend", liZonas)
             liZonas.insertAdjacentElement('beforeend', botonZona)
             liZonas.insertAdjacentElement('beforeend', botonVerEspecies)
@@ -186,8 +202,8 @@ function formularioZonas() {
 function formEspecie(e) {
     let sectionListEspecies = document.getElementById('sectionListEspecies')
     sectionListEspecies.style = "display:none;"
-    nombreEspecie = e.target.textContent;
     cambioFormulario = enums.formEspecie;
+    nombreZona = e.target.parentNode.childNodes[0].textContent;
     let sectionMensajes = document.getElementById('sectionMensajes');
     sectionMensajes.style = "display:none;"
     let h1Formulario = document.getElementById('h1Formulario')
@@ -203,76 +219,92 @@ function formEspecie(e) {
     sectionForm.style = "display:flex;"
 
 }
-function agregarEspecie(especie) {
-    arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
+function agregarEspecies(nombreEspecie) {
     let arrayEspecies = [];
-    let especieAnimal = {
-        especieAnimal: especie,
-    }
 
+    arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
     arrayZonas.forEach(element => {
-        if (element.nombreZona === nombreEspecie) {
-            // element.especie = especieAnimal;
+
+        if (element.Zona === nombreZona) {
             if (element.especie === undefined) {
+                idZona = element.Id;
                 element.especie = arrayEspecies;
-                arrayEspecies.push(especieAnimal)
+                let especieNew = {
+                    especieName: nombreEspecie,
+                    id: element.Id,
+                }
+                arrayEspecies.push(especieNew)
             }
             else {
                 arrayEspecies = element.especie;
-                arrayEspecies.push(especieAnimal)
-
+                let especieNew = {
+                    especieName: nombreEspecie,
+                    id: element.Id,
+                }
+                arrayEspecies.push(especieNew)
             }
         }
-        guardarZonas()
+        else {
+            true
+        }
     })
+    guardarZonas()
 }
 function imprimirEspecies(e) {
     let sectionForm = document.getElementById('sectionForm')
     sectionForm.style = "display:none;"
-    nombreEspecie = e.target.parentNode.childNodes[0].textContent;
+    nombreZona = e.target.parentNode.childNodes[0].textContent;
     arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
+    //lamados id y creacion ul
     let sectionListEspecies = document.getElementById('sectionListEspecies')
     sectionListEspecies.style = "display:grid"
-    let ulEspecies = document.createElement('ul')
+    sectionListEspecies.innerHTML = "";
+    let ulEspecies = document.createElement('ul');
     ulEspecies.className = "dropdown-menu position-static d-grid gap-1 p-2 rounded-3 mx-0 shadow w-220px listEspecies"
-    sectionListEspecies.innerHTML = ""
     arrayZonas.forEach(element => {
-        if (element.nombreZona == nombreEspecie) {
-            let especie = element.especie;
-            especie.forEach(element => {
-                let liEspecie = document.createElement('li')
-                let buttonEspecie = document.createElement('button');
-                let buttonAddAnimal = document.createElement('button');
-                let buttonVerAnimales = document.createElement('button');
-                //eventos
-                buttonAddAnimal.addEventListener('click',formAnimal)    
-                //dar contenido
-                buttonAddAnimal.textContent = "+"
-                buttonVerAnimales.textContent = ">"
-                buttonEspecie.textContent = element.especieAnimal
-                //dar clases
-                buttonVerAnimales.className = "btn  btn-outline-primary botonVerAnimal";
-                buttonAddAnimal.className = "btn botonAnimalAdd";
-                buttonEspecie.className = "dropdown-item rounded-2";
-                liEspecie.className = " rounded-2 liEspecie";
-                //inserciones 
-                sectionListEspecies.insertAdjacentElement('beforeend', ulEspecies);
-                ulEspecies.insertAdjacentElement('beforeend', liEspecie);
-                liEspecie.insertAdjacentElement('beforeend', buttonEspecie)
-                liEspecie.insertAdjacentElement('beforeend',buttonAddAnimal)
-                liEspecie.insertAdjacentElement('beforeend',buttonVerAnimales)
-            
-            })
+        if (element.Zona === nombreZona) {
+            if (element.especie === undefined) {
+                true
+            }
+            else {
+                let arrayEspecies = [];
+                arrayEspecies = element.especie;
+                arrayEspecies.forEach(element => {
+                    let li = document.createElement('li');
+                    let buttonEspecie = document.createElement('button');
+                    let buttonAddAnimal = document.createElement('button');
+                    let buttonVerAnimales = document.createElement('button');
+                    //eventos
+                    buttonAddAnimal.addEventListener('click', formAnimal)
+                    //contenido
+                    buttonAddAnimal.textContent = "+"
+                    buttonVerAnimales.textContent = ">"
+                    buttonEspecie.textContent = element.especieName
+                    // clases
+                    buttonVerAnimales.className = "btn  btn-outline-primary botonVerAnimal";
+                    buttonAddAnimal.className = "btn botonAnimalAdd";
+                    buttonEspecie.className = "dropdown-item rounded-2";
+                    li.className = " rounded-2 liEspecie";
+                    // inserciones
+                    sectionListEspecies.insertAdjacentElement('beforeend', ulEspecies);
+                    ulEspecies.insertAdjacentElement('beforeend', li);
+                    li.insertAdjacentElement('beforeend', buttonEspecie)
+                    li.insertAdjacentElement('beforeend', buttonAddAnimal)
+                    li.insertAdjacentElement('beforeend', buttonVerAnimales)
+                })
+            }
         }
         else {
-
+            true
         }
     })
 }
 //animales
-function formAnimal(e){
+function formAnimal(e) {
     cambioFormulario = enums.formAnimales;
-    especieAnimal = e.target.parentNode.childNodes[0].textContent;
+    let sectionListEspecies = document.getElementById('sectionListEspecies')
+    sectionListEspecies.style = "display:none;"
+    nombreEspecie = e.target.parentNode.childNodes[0].textContent;
     let sectionMensajes = document.getElementById('sectionMensajes');
     sectionMensajes.style = "display:none;"
     let h1Formulario = document.getElementById('h1Formulario')
@@ -280,40 +312,56 @@ function formAnimal(e){
     let labelElevar = document.getElementById('labelElevar')
 
     //cambios del formulario
-    h1Formulario.textContent = "Agrega el nombre del Animal"
+    h1Formulario.textContent = "Agrega el nombre del animal"
     textAreaForm.style = "display: none;"
     labelElevar.style = "display: none;"
     //aparecer form
     let sectionForm = document.getElementById('sectionForm')
     sectionForm.style = "display:flex;"
+
 }
 function agregarAnimales(nombreAnimal) {
-    arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
+    let arrayEspecies = [];
     let arrayAnimales = [];
-    let animal = {
-        animal: nombreAnimal,
-    }
+
+    arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
     arrayZonas.forEach(element => {
-        if (element.nombreZona === nombreEspecie) {
-            let arrayEspecies = element.especie;
+        if (element.Zona === nombreZona) {
+            arrayEspecies = element.especie
             arrayEspecies.forEach(element => {
-                if (element.especieAnimal === especieAnimal) {
-                    if (element.animal === undefined){
-                        element.animal = arrayAnimales;
-                        arrayAnimales.push(animal)
+                if (element.especieName === nombreEspecie) {
+                
+                    if (element.animales === undefined) {
+                        element.animales = arrayAnimales;
+                        let animalNew = {
+                            animalName: nombreAnimal,
+
+                        }
+                        arrayAnimales.push(animalNew)
+                        console.log('entro if');
+
                     }
-                   else{
-                    arrayAnimales = element.animal;
-                    arrayAnimales.push(animal)
-                   }
+                    else {
+                        arrayAnimales = element.animales;
+                        let animalNew = {
+                            animalName: nombreAnimal,
+
+                        }
+                        arrayAnimales.push(animalNew)
+                        console.log('entro else');
+                    }
+
                 }
                 else {
-                    console.log('no');
+                    true
                 }
-
             })
+        }
+        else {
+            true
         }
     })
     guardarZonas()
 }
+
 document.addEventListener('DOMContentLoaded', imprimirZonas)

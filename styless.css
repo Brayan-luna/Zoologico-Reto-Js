@@ -141,3 +141,8 @@ body {
     border: solid 2px white;
     color: white;
 }
+/* sectionAnimalEspecie */
+.sectionAnimalEspecie{
+    display: flex;
+    flex-direction: row;
+}

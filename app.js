@@ -24,14 +24,6 @@ function newId() {
 let formularioMensaj = document.getElementById('formulario');
 formularioMensaj.addEventListener('submit', submitForm);
 
-//boton buzon mensaje
-let botonMensjes = document.getElementById('BuzonMensajes');
-botonMensjes.addEventListener("click", imprimirMensajes)
-
-//boton Crear Mensajes
-let botonCrearMensaje = document.getElementById('CrearMensajes');
-botonCrearMensaje.addEventListener('click', crearMensajes)
-
 //boton Crear Zonas 
 let botonCrearZonas = document.getElementById('crearZona');
 botonCrearZonas.addEventListener('click', formularioZonas)
@@ -91,7 +83,7 @@ function guardarComentario() {
 function guardarMensaje() {
     localStorage.setItem("Mensajes", JSON.stringify(arrayBuzonMensajes))
 }
-function crearMensajes() {
+function crearComentario() {
     cambioFormulario = enums.formComentario
     let h1Formulario = document.getElementById('h1Formulario')
     let textAreaForm = document.getElementById('inputContenidoMenj');
@@ -108,7 +100,7 @@ function crearMensajes() {
     sectionForm.style = "display:flex;"
     //inputsFormMensajes
 }
-function imprimirMensajes() {
+function imprimirComentario() {
     let sectionForm = document.getElementById('sectionForm')
     sectionForm.style = "display:none;"
     arrayBuzonMensajes = JSON.parse(localStorage.getItem('Mensajes'))
@@ -276,6 +268,7 @@ function imprimirEspecies(e) {
                     let buttonVerAnimales = document.createElement('button');
                     //eventos
                     buttonAddAnimal.addEventListener('click', formAnimal)
+                    buttonVerAnimales.addEventListener('click',imprimirAnimales)
                     //contenido
                     buttonAddAnimal.textContent = "+"
                     buttonVerAnimales.textContent = ">"
@@ -363,5 +356,73 @@ function agregarAnimales(nombreAnimal) {
     })
     guardarZonas()
 }
+function imprimirAnimales(e){
+    let sectionForm = document.getElementById('sectionForm')
+    sectionForm.style = "display:none;"
+    nombreEspecie = e.target.parentNode.childNodes[0].textContent;
+    arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
+    //lamados id y creacion ul
+    let sectionListAnimales = document.getElementById('sectionListAnimales')
+    sectionListAnimales.style = "display:grid"
+    sectionListAnimales.innerHTML = "";
+    let ulAnimales = document.createElement('ul');
+    ulAnimales.className = "dropdown-menu position-static d-grid gap-1 p-2 rounded-3 mx-0 shadow w-220px listEspecies"
+    arrayZonas.forEach(element => {
+        if (element.Zona === nombreZona) {
+            if (element.especie === undefined) {
+                true
+            }
+            else {
+                let arrayEspecies = [];
+                arrayEspecies = element.especie;
+                arrayEspecies.forEach(element => {
+                    if(element.especieName === nombreEspecie){
+                        if(element.animales === undefined){
+                            false
+                        }
+                        else{
+                            let arrayEspecies = element.animales;
+                            arrayEspecies.forEach(element=>{
+                                let li = document.createElement('li');
+                                let buttonAnimal = document.createElement('button');
+                                let buttonAddComentario = document.createElement('button');
+                                let buttonverComentario = document.createElement('button');
+                                //eventos
+                                buttonAddComentario.addEventListener('click', crearComentario)
+                                buttonverComentario.addEventListener('click',imprimirComentario)
+                                //contenido
+                                buttonAddComentario.textContent = "+"
+                                buttonverComentario.textContent = ">"
+                                buttonAnimal.textContent = element.animalName
+                                // clases
+                                buttonverComentario.className = "btn  btn-outline-primary botonVerAnimal";
+                                buttonAddComentario.className = "btn botonAnimalAdd";
+                                buttonAnimal.className = "dropdown-item rounded-2";
+                                li.className = " rounded-2 liEspecie";
+                                // inserciones
+                                sectionListAnimales.insertAdjacentElement('beforeend', ulAnimales);
+                                ulAnimales.insertAdjacentElement('beforeend', li);
+                                li.insertAdjacentElement('beforeend', buttonAnimal)
+                                li.insertAdjacentElement('beforeend', buttonAddComentario)
+                                li.insertAdjacentElement('beforeend', buttonverComentario)
+                            })
+                        }
+                      
+                       
+                    }
+                    else{
+                       true
+                    }
+                })
+            }
+        }
+        else {
+            true
+        }
+    }) 
+}
+//comentarios
+function addComentarios(){
 
+}
 document.addEventListener('DOMContentLoaded', imprimirZonas)

@@ -1,16 +1,17 @@
 //arrays 
 let arrayBuzonMensajes = [];
-let arrayComentarios = [];
 let arrayZonas = [];
 let cambioFormulario = "";
 let nombreZona = 0;
 let nombreEspecie = 0;
-
+let nombreAnimal = 0;
+let nombreComent = 0;
 let enums = {
     formComentario: "comentario",
     formZona: "zonas",
     formEspecie: "especie",
     formAnimales: "animales",
+    formRespuesta: "respuesta"
 }
 // funtion crear id
 function newId() {
@@ -19,7 +20,6 @@ function newId() {
     localStorage.setItem("Id", JSON.stringify(newLasId));
     return newLasId;
 }
-
 //formulario Mensaje
 let formularioMensaj = document.getElementById('formulario');
 formularioMensaj.addEventListener('submit', submitForm);
@@ -41,16 +41,10 @@ function crearZonas(nombreZona, id) {
 function submitForm(e) {
     e.preventDefault();
     if (cambioFormulario === enums.formComentario) {
-        let nombreMensaj = document.getElementById('inputNombreMenj').value;
-        let contenidoMensaj = document.getElementById('inputContenidoMenj').value;
-        //push array
-        let comentarioNuevo = {
-            nombre: nombreMensaj,
-            contenido: contenidoMensaj,
-        }
-        arrayBuzonMensajes.push(comentarioNuevo)
+        let nombreComentario = document.getElementById('inputNombreMenj').value;
+        let contenidoComentario = document.getElementById('inputContenidoMenj').value;
         formularioMensaj.reset()
-        guardarMensaje()
+        addComentario(nombreComentario, contenidoComentario)
 
     }
 
@@ -74,76 +68,16 @@ function submitForm(e) {
         formularioMensaj.reset()
 
     }
-
-}
-//comentarios
-function guardarComentario() {
-    localStorage.setItem("Comentarios", JSON.stringify(arrayComentarios))
-}
-function guardarMensaje() {
-    localStorage.setItem("Mensajes", JSON.stringify(arrayBuzonMensajes))
-}
-function crearComentario() {
-    cambioFormulario = enums.formComentario
-    let h1Formulario = document.getElementById('h1Formulario')
-    let textAreaForm = document.getElementById('inputContenidoMenj');
-    let labelElevar = document.getElementById('labelElevar')
-
-    //cambios del formulario
-    h1Formulario.textContent = "Agrega Tu Comentario"
-    textAreaForm.style = "display: flex;"
-    labelElevar.style = "display: flex;"
-
-    let sectionMensajes = document.getElementById('sectionMensajes');
-    sectionMensajes.style = "display: none"
-    let sectionForm = document.getElementById('sectionForm')
-    sectionForm.style = "display:flex;"
-    //inputsFormMensajes
-}
-function imprimirComentario() {
-    let sectionForm = document.getElementById('sectionForm')
-    sectionForm.style = "display:none;"
-    arrayBuzonMensajes = JSON.parse(localStorage.getItem('Mensajes'))
-    if (arrayBuzonMensajes === null) {
-        arrayBuzonMensajes = [];
-    }
-    else {
-        let sectionMensajes = document.getElementById('sectionMensajes');
-        sectionMensajes.style = "display:flex;"
-        sectionMensajes.innerHTML = ""
-        arrayBuzonMensajes.forEach(element => {
-            let divContainerMensaj = document.createElement('div');
-            let h2Mensaj = document.createElement('h2');
-            let textoMensaj = document.createElement('p');
-            let botonMensaj = document.createElement('button')
-            //insertar clases y ids
-            divContainerMensaj.className = "text-bg-dark  divComentario"
-            botonMensaj.className = "btn btn-outline-light"
-            botonMensaj.setAttribute("id", "botonEliminarMensaj")
-            botonMensaj.addEventListener('click', eliminarMensaje)
-            //dar contenidos
-            h2Mensaj.textContent = element.nombre
-            textoMensaj.textContent = element.contenido
-            botonMensaj.textContent = "Eliminar"
-            //inserciones
-            sectionMensajes.insertAdjacentElement("beforeend", divContainerMensaj);
-            divContainerMensaj.insertAdjacentElement('beforeend', h2Mensaj)
-            divContainerMensaj.insertAdjacentElement('beforeend', textoMensaj)
-            divContainerMensaj.insertAdjacentElement('beforeend', botonMensaj)
-        });
+    else if (cambioFormulario === enums.formRespuesta) {
+        let nombreComentario = document.getElementById('inputNombreMenj').value;
+        let contenidoComentario = document.getElementById('inputContenidoMenj').value;
+        addRespuestaComent(nombreComentario, contenidoComentario)
+        formularioMensaj.reset()
 
     }
 
-}
-function eliminarMensaje(e) {
-    let identificador = e.target.parentNode.childNodes[0].textContent;
-    e.target.parentNode.remove()
-    let datosMensajes = JSON.parse(localStorage.getItem('Mensajes'))
-    let newDatosMensajes = datosMensajes.filter(element => element.nombre !== identificador)
-    localStorage.setItem("Mensajes", JSON.stringify(newDatosMensajes))
 
 }
-
 //zonas
 function guardarZonas() {
     localStorage.setItem("Zonas", JSON.stringify(arrayZonas))
@@ -268,7 +202,7 @@ function imprimirEspecies(e) {
                     let buttonVerAnimales = document.createElement('button');
                     //eventos
                     buttonAddAnimal.addEventListener('click', formAnimal)
-                    buttonVerAnimales.addEventListener('click',imprimirAnimales)
+                    buttonVerAnimales.addEventListener('click', imprimirAnimales)
                     //contenido
                     buttonAddAnimal.textContent = "+"
                     buttonVerAnimales.textContent = ">"
@@ -323,7 +257,7 @@ function agregarAnimales(nombreAnimal) {
             arrayEspecies = element.especie
             arrayEspecies.forEach(element => {
                 if (element.especieName === nombreEspecie) {
-                
+
                     if (element.animales === undefined) {
                         element.animales = arrayAnimales;
                         let animalNew = {
@@ -331,7 +265,7 @@ function agregarAnimales(nombreAnimal) {
 
                         }
                         arrayAnimales.push(animalNew)
-                        console.log('entro if');
+
 
                     }
                     else {
@@ -341,7 +275,7 @@ function agregarAnimales(nombreAnimal) {
 
                         }
                         arrayAnimales.push(animalNew)
-                        console.log('entro else');
+
                     }
 
                 }
@@ -356,7 +290,7 @@ function agregarAnimales(nombreAnimal) {
     })
     guardarZonas()
 }
-function imprimirAnimales(e){
+function imprimirAnimales(e) {
     let sectionForm = document.getElementById('sectionForm')
     sectionForm.style = "display:none;"
     nombreEspecie = e.target.parentNode.childNodes[0].textContent;
@@ -376,20 +310,20 @@ function imprimirAnimales(e){
                 let arrayEspecies = [];
                 arrayEspecies = element.especie;
                 arrayEspecies.forEach(element => {
-                    if(element.especieName === nombreEspecie){
-                        if(element.animales === undefined){
+                    if (element.especieName === nombreEspecie) {
+                        if (element.animales === undefined) {
                             false
                         }
-                        else{
+                        else {
                             let arrayEspecies = element.animales;
-                            arrayEspecies.forEach(element=>{
+                            arrayEspecies.forEach(element => {
                                 let li = document.createElement('li');
                                 let buttonAnimal = document.createElement('button');
                                 let buttonAddComentario = document.createElement('button');
                                 let buttonverComentario = document.createElement('button');
                                 //eventos
-                                buttonAddComentario.addEventListener('click', crearComentario)
-                                buttonverComentario.addEventListener('click',imprimirComentario)
+                                buttonAddComentario.addEventListener('click', formComentarios)
+                                buttonverComentario.addEventListener('click', imprimirComentario)
                                 //contenido
                                 buttonAddComentario.textContent = "+"
                                 buttonverComentario.textContent = ">"
@@ -407,11 +341,11 @@ function imprimirAnimales(e){
                                 li.insertAdjacentElement('beforeend', buttonverComentario)
                             })
                         }
-                      
-                       
+
+
                     }
-                    else{
-                       true
+                    else {
+                        true
                     }
                 })
             }
@@ -419,10 +353,234 @@ function imprimirAnimales(e){
         else {
             true
         }
-    }) 
+    })
 }
 //comentarios
-function addComentarios(){
+function addComentario(nombreComent, contenidoComent) {
+    let arrayComentarios = [];
+    arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
+    arrayZonas.forEach(element => {
+        if (element.Zona === nombreZona) {
+            arrayEspecies = element.especie
+            arrayEspecies.forEach(element => {
+                if (element.especieName === nombreEspecie) {
+                    if (element.animales === undefined) {
+                        false
+                    }
+                    else {
+                        let arrayAnimales = element.animales;
+                        arrayAnimales.forEach(element => {
+                            if (element.animalName === nombreAnimal) {
+                                if (element.comentario === undefined) {
+                                    element.comentario = arrayComentarios;
+                                    let comentarioNew = {
+                                        nombreComentario: nombreComent,
+                                        contenidoComentario: contenidoComent,
+                                    }
+                                    arrayComentarios.push(comentarioNew)
+                                }
+                                else {
+                                    arrayComentarios = element.comentario;
+                                    let comentarioNew = {
+                                        nombreComentario: nombreComent,
+                                        contenidoComentario: contenidoComent,
+                                    }
+                                    arrayComentarios.push(comentarioNew)
+                                }
+                            }
+                            else {
+                                true
+                            }
+                        })
+                    }
+
+                }
+                else {
+                    true
+                }
+            })
+
+        }
+        else {
+            true
+        }
+    })
+    guardarZonas()
+}
+function formComentarios(e) {
+    cambioFormulario = enums.formComentario
+    nombreAnimal = e.target.parentNode.childNodes[0].textContent;
+    let h1Formulario = document.getElementById('h1Formulario')
+    let textAreaForm = document.getElementById('inputContenidoMenj');
+    let labelElevar = document.getElementById('labelElevar')
+    //cambios del formulario
+    h1Formulario.textContent = "Agrega Tu Comentario"
+    textAreaForm.style = "display: flex;"
+    labelElevar.style = "display: flex;"
+    let sectionMensajes = document.getElementById('sectionMensajes');
+    sectionMensajes.style = "display: none"
+    let sectionForm = document.getElementById('sectionForm')
+    sectionForm.style = "display:flex;"
+    //inputsFormMensajes
+}
+function imprimirComentario(e) {
+    nombreAnimal = e.target.parentNode.childNodes[0].textContent;
+    let sectionForm = document.getElementById('sectionForm')
+    sectionForm.style = "display:none;"
+    arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
+    let sectionComentario = document.getElementById('sectionMensajes');
+    sectionComentario.style = "display:flex;"
+    sectionComentario.innerHTML = ""
+    arrayZonas.forEach(element => {
+        if (element.Zona === nombreZona) {
+            arrayEspecies = element.especie
+            arrayEspecies.forEach(element => {
+                if (element.especieName === nombreEspecie) {
+                    if (element.animales === undefined) {
+                        false
+                    }
+                    else {
+                        let arrayAnimales = element.animales;
+                        arrayAnimales.forEach(element => {
+                            if (element.animalName === nombreAnimal) {
+                                if (element.comentario === undefined) {
+                                    true
+                                }
+                                else {
+                                    arrayComentarios = element.comentario;
+                                    arrayComentarios.forEach(element => {
+                                        let divContainerMensaj = document.createElement('div');
+                                        let h2Mensaj = document.createElement('h2');
+                                        let textoMensaj = document.createElement('p');
+                                        let botonEliminarComentario = document.createElement('button')
+                                        let botonAddRespuesta = document.createElement('button')
+                                        let divBotoDrop = document.createElement("div")
+                                        let divBotones = document.createElement('div');
+                                        let botonVerRespuesta = document.createElement('button');
+                                   
+                                        //insertar clases y ids
+                                     
+                                     
+                                        divContainerMensaj.className = "text-bg-dark  divComentario"
+                                        botonEliminarComentario.className = "btn btn-outline-light"
+                                        botonAddRespuesta.className = "btn btn-outline-light botonRespuesta";
+                                        divBotones.className = "divBotonesComent"
+                                        botonVerRespuesta.className = "btn  btn-outline-primary botonVerRespuestas"
+                                        //eventos
+                                        botonEliminarComentario.addEventListener('click', eliminarComentario)
+                                        botonAddRespuesta.addEventListener('click', formRespuesta)
+                                        botonVerRespuesta.addEventListener('click', verRespuestas)
+                                        //dar contenidos
+                                        h2Mensaj.textContent = element.nombreComentario
+                                        textoMensaj.textContent = element.contenidoComentario;
+                                        botonEliminarComentario.textContent = "Eliminar"
+                                        botonAddRespuesta.textContent = "Responder"
+                                        botonVerRespuesta.textContent = ">"
+
+                                        //inserciones
+                                        sectionComentario.insertAdjacentElement("beforeend", divContainerMensaj);
+                                        divContainerMensaj.insertAdjacentElement('beforeend', h2Mensaj)
+                                        divContainerMensaj.insertAdjacentElement('beforeend', textoMensaj)
+                                        divContainerMensaj.insertAdjacentElement('beforeend', divBotones)
+                                        divBotones.insertAdjacentElement('beforeend', botonEliminarComentario)
+                                        divBotones.insertAdjacentElement('beforeend', botonAddRespuesta)
+                                        divBotones.insertAdjacentElement('beforeend', botonVerRespuesta)
+                                        divBotones.insertAdjacentElement('beforeend', divBotoDrop)
+                                        divBotoDrop.insertAdjacentElement('beforeend', botonAddRespuesta)
+                                        divBotoDrop.insertAdjacentElement('beforeend', botonVerRespuesta)
+
+                                    })
+                                }
+                            }
+
+                        })
+                    }
+
+                }
+            })
+
+        }
+    })
+}
+function eliminarComentario(e) {
+    let identificador = e.target.parentNode.childNodes[0].textContent;
+    e.target.parentNode.remove()
+    let datosMensajes = JSON.parse(localStorage.getItem('Mensajes'))
+    let newDatosMensajes = datosMensajes.filter(element => element.nombre !== identificador)
+    localStorage.setItem("Mensajes", JSON.stringify(newDatosMensajes))
+}
+//respuestas
+function formRespuesta(e) {
+    nombreComent = e.target.parentNode.parentNode.parentNode.childNodes[0].textContent;
+    cambioFormulario = enums.formRespuesta;
+    let h1Formulario = document.getElementById('h1Formulario')
+    let textAreaForm = document.getElementById('inputContenidoMenj');
+    let labelElevar = document.getElementById('labelElevar')
+    //cambios del formulario
+    h1Formulario.textContent = "Agrega Tu respuesta"
+    textAreaForm.style = "display: flex;"
+    labelElevar.style = "display: flex;"
+    let sectionMensajes = document.getElementById('sectionMensajes');
+    sectionMensajes.style = "display: none"
+    let sectionForm = document.getElementById('sectionForm')
+    sectionForm.style = "display:flex;"
+}
+function addRespuestaComent(nombre, contenido) {
+    arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
+    let arrayRespuesta = [];
+    arrayZonas.forEach(element => {
+        if (element.Zona === nombreZona) {
+            arrayEspecies = element.especie
+            arrayEspecies.forEach(element => {
+                if (element.especieName === nombreEspecie) {
+                    let arrayAnimales = element.animales;
+                    arrayAnimales.forEach(element => {
+                        if (element.animalName === nombreAnimal) {
+                            let arrayComentarios = element.comentario
+                            arrayComentarios.forEach(element => {
+                                if (element.nombreComentario === nombreComent) {
+                                    if (element.respuestas === undefined) {
+                                        element.respuestas = arrayRespuesta;
+                                        let respuestaNew = {
+                                            nombreRespuesta: nombre,
+                                            contenidoRespuesta: contenido,
+                                        }
+                                        arrayRespuesta.push(respuestaNew)
+                                    }
+                                    else {
+                                        arrayRespuesta = element.respuestas;
+                                        let respuestaNew = {
+                                            nombreRespuesta: nombre,
+                                            contenidoRespuesta: contenido,
+                                        }
+                                        arrayRespuesta.push(respuestaNew)
+                                    }
+                                }
+                                else {
+                                    true
+                                }
+                            })
+                        }
+                        else {
+                            true
+                        }
+                    })
+                }
+                else {
+                    true
+                }
+            })
+        }
+        else {
+            true
+        }
+    })
+    guardarZonas()
+}
+function verRespuestas(e) {
+
+}
+function imprimirRespuestas() {
 
 }
 document.addEventListener('DOMContentLoaded', imprimirZonas)

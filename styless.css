@@ -86,16 +86,15 @@ body {
     margin-bottom: 10px;
     padding: 20px;
     border-radius: 20px;
-    width: 400px;
+    max-width: 500px;
     min-height: 80px;
 
 }
 .sectionMensajes{
     padding-top: 10px;
     display: flex;
-    justify-content: center;
+    padding-left: 10px;
     flex-direction: column;
-    align-items: center;
 }
 /* zonas */
 .ulZonas{
@@ -142,7 +141,21 @@ body {
     color: white;
 }
 /* sectionAnimalEspecie */
-.sectionAnimalEspecie{
+.sectionEspecieAnimal{
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
+}
+.divBotonesComent{
+    display: flex;
+   justify-content: space-between;
+}
+/* boton comentarios */
+.botonVerRespuestas{
+    background-color: #212529;
+    color: white;
+    border-color: white;
+}
+/* respuestas */
+.respuestas{
+    display: none;
 }

@@ -28,12 +28,18 @@ function newId() {
 //formulario Mensaje
 let formularioMensaj = document.getElementById('formulario');
 formularioMensaj.addEventListener('submit', submitForm);
-
 //boton Crear Zonas 
 let botonCrearZonas = document.getElementById('crearZona');
 botonCrearZonas.addEventListener('click', formularioZonas)
-
+let botonEliminarData = document.getElementById('eliminarData');
+botonEliminarData.addEventListener('click', eliminarData);
 //funciones
+function eliminarData() {
+    arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
+    arrayZonas = []
+    guardarZonas()
+    location.reload()
+}
 function crearZonas(nombreZona, id) {
     let zonaAnimal = {
         Zona: nombreZona,
@@ -48,7 +54,9 @@ function submitForm(e) {
     if (cambioFormulario === enums.formComentario) {
         let nombreComentario = document.getElementById('inputNombreMenj').value;
         let contenidoComentario = document.getElementById('inputContenidoMenj').value;
-        if (/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreComentario) && /\S/.test(contenidoComentario)) {
+        nombreComentario = nombreComentario.toLowerCase();
+        contenidoComentario = contenidoComentario.toLowerCase();
+        if (/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreComentario) && /\S/.test(contenidoComentario)&& nombreComentario.length >= 4 && contenidoComentario.length >= 4) {
             addComentario(nombreComentario, contenidoComentario)
             formularioMensaj.reset()
         }
@@ -56,11 +64,10 @@ function submitForm(e) {
             alert('!ERROR! revisa bien los campos a llenar')
         }
     }
-
     else if (cambioFormulario === enums.formZona) {
         let nombreZona = document.getElementById('inputNombreMenj').value;
         nombreZona = nombreZona.toLowerCase();
-        if ((/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreZona))) {
+        if ((/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreZona)) && nombreZona.length >= 4) {
             let id = newId()
             validarZona(nombreZona)
             if (zonaValidadad === false) {
@@ -71,17 +78,15 @@ function submitForm(e) {
             else {
                 alert(`!ERROR! la zona ${nombreZona} ya existe`)
             }
-
         }
         else {
             alert('!ERROR! revisa bien los campos a llenar')
         }
-
     }
     else if (cambioFormulario === enums.formEspecie) {
         let nombreEspecie = document.getElementById('inputNombreMenj').value;
         nombreEspecie = nombreEspecie.toLowerCase();
-        if ((/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreEspecie))) {
+        if ((/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreEspecie))&& nombreEspecie.length >= 4) {
             validarEspecies(nombreEspecie)
             if (zonaValidadad === false) {
                 agregarEspecies(nombreEspecie)
@@ -94,12 +99,11 @@ function submitForm(e) {
         else {
             alert('!ERROR! revisa bien los campos a llenar')
         }
-
     }
     else if (cambioFormulario === enums.formAnimales) {
         let nombreAnimal = document.getElementById('inputNombreMenj').value;
         nombreAnimal = nombreAnimal.toLowerCase();
-        if ((/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreAnimal))) {
+        if ((/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreAnimal)) && nombreAnimal.length >= 4) {
             validarAnimales(nombreAnimal)
             if (zonaValidadad === false) {
                 agregarAnimales(nombreAnimal)
@@ -112,22 +116,20 @@ function submitForm(e) {
         else {
             alert('!ERROR! revisa bien los campos a llenar')
         }
-
-
     }
     else if (cambioFormulario === enums.formRespuesta) {
-        let nombreComentario = document.getElementById('inputNombreMenj').value;
-        let contenidoComentario = document.getElementById('inputContenidoMenj').value;
-        if (/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreComentario) && /\S/.test(contenidoComentario)) {
-            addRespuestaComent(nombreComentario, contenidoComentario)
+        let nombreRespuesta = document.getElementById('inputNombreMenj').value;
+        let contenidoRespuesta = document.getElementById('inputContenidoMenj').value;
+        nombreRespuesta = nombreRespuesta.toLowerCase();
+        contenidoRespuesta = contenidoRespuesta.toLowerCase();
+        if (/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreRespuesta) && /\S/.test(contenidoRespuesta) && nombreRespuesta.length >= 4 && contenidoRespuesta.length >= 4) {
+            addRespuestaComent(nombreRespuesta, contenidoRespuesta)
             formularioMensaj.reset()
         }
         else {
             alert('!ERROR! revisa bien los campos a llenar')
         }
     }
-
-
 }
 //zonas
 function guardarZonas() {
@@ -148,7 +150,7 @@ function imprimirZonas() {
             botonZona.addEventListener('click', formEspecie)
             let liZonas = document.createElement('li');
             //dar clases 
-            botonVerEspecies.textContent = "Esp"
+            botonVerEspecies.textContent = ">"
             botonVerEspecies.className = "btn btn-primary btonEspecie"
             botonZona.className = "btn btn-primary btonZona"
             botonZona.textContent = element.Zona
@@ -157,9 +159,10 @@ function imprimirZonas() {
             liZonas.insertAdjacentElement('beforeend', botonVerEspecies)
         })
     }
-
 }
 function formularioZonas() {
+    let sectionBusqueda = document.getElementById('sectionBusqueda');
+    sectionBusqueda.style = "display:none"
     cambioFormulario = enums.formZona;
     let sectionMensajes = document.getElementById('sectionMensajes');
     sectionMensajes.style = "display:none;"
@@ -170,7 +173,6 @@ function formularioZonas() {
     let h1Formulario = document.getElementById('h1Formulario')
     let textAreaForm = document.getElementById('inputContenidoMenj');
     let labelElevar = document.getElementById('labelElevar')
-
     //cambios del formulario
     h1Formulario.textContent = "Agrega el nombre de la zona"
     textAreaForm.style = "display: none;"
@@ -181,6 +183,8 @@ function formularioZonas() {
 }
 //especies
 function formEspecie(e) {
+    let sectionBusqueda = document.getElementById('sectionBusqueda');
+    sectionBusqueda.style = "display:none"
     zonaValidadad = false;
     let sectionListEspecies = document.getElementById('sectionListEspecies')
     sectionListEspecies.style = "display:none;"
@@ -200,14 +204,11 @@ function formEspecie(e) {
     //aparecer form
     let sectionForm = document.getElementById('sectionForm')
     sectionForm.style = "display:flex;"
-
 }
 function agregarEspecies(nombreEspecie) {
     let arrayEspecies = [];
-
     arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
     arrayZonas.forEach(element => {
-
         if (element.Zona === nombreZona) {
             if (element.especie === undefined) {
                 idZona = element.Id;
@@ -234,6 +235,10 @@ function agregarEspecies(nombreEspecie) {
     guardarZonas()
 }
 function imprimirEspecies(e) {
+    let sectionBusqueda = document.getElementById('sectionBusqueda');
+    sectionBusqueda.style = "display:none"
+    let sectionComentario = document.getElementById('sectionMensajes');
+    sectionComentario.style = "display:none;"
     let h3Title = document.createElement('h3');
     h3Title.className = "titulosAnimalesEspecies"
     h3Title.textContent = "Especies:"
@@ -253,7 +258,6 @@ function imprimirEspecies(e) {
     arrayZonas.forEach(element => {
         if (element.Zona === nombreZona) {
             if (element.especie === undefined) {
-                true
             }
             else {
                 let arrayEspecies = [];
@@ -284,9 +288,6 @@ function imprimirEspecies(e) {
                 })
             }
         }
-        else {
-            true
-        }
     })
 }
 //animales
@@ -301,7 +302,6 @@ function formAnimal(e) {
     let h1Formulario = document.getElementById('h1Formulario')
     let textAreaForm = document.getElementById('inputContenidoMenj');
     let labelElevar = document.getElementById('labelElevar')
-
     //cambios del formulario
     h1Formulario.textContent = "Agrega el nombre del animal"
     textAreaForm.style = "display: none;"
@@ -309,7 +309,6 @@ function formAnimal(e) {
     //aparecer form
     let sectionForm = document.getElementById('sectionForm')
     sectionForm.style = "display:flex;"
-
 }
 function agregarAnimales(nombreAnimal) {
     let arrayEspecies = [];
@@ -342,6 +341,8 @@ function agregarAnimales(nombreAnimal) {
     guardarZonas()
 }
 function imprimirAnimales(e) {
+    let sectionBusqueda = document.getElementById('sectionBusqueda');
+    sectionBusqueda.style = "display:none"
     let h3Animales = document.createElement('h3');
     h3Animales.textContent = "Animales:"
     h3Animales.className = "titulosAnimalesEspecies"
@@ -415,7 +416,6 @@ function addComentario(nombreComent, contenidoComent) {
             arrayEspecies.forEach(element => {
                 if (element.especieName === nombreEspecie) {
                     if (element.animales === undefined) {
-                        false
                     }
                     else {
                         let arrayAnimales = element.animales;
@@ -465,6 +465,8 @@ function formComentarios(e) {
     //inputsFormMensajes
 }
 function imprimirComentario(e) {
+    let sectionBusqueda = document.getElementById('sectionBusqueda');
+    sectionBusqueda.style = "display:none"
     nombreAnimal = e.target.parentNode.childNodes[0].textContent;
     let sectionForm = document.getElementById('sectionForm')
     sectionForm.style = "display:none;"
@@ -478,14 +480,12 @@ function imprimirComentario(e) {
             arrayEspecies.forEach(element => {
                 if (element.especieName === nombreEspecie) {
                     if (element.animales === undefined) {
-                        false
                     }
                     else {
                         let arrayAnimales = element.animales;
                         arrayAnimales.forEach(element => {
                             if (element.animalName === nombreAnimal) {
                                 if (element.comentario === undefined) {
-                                    true
                                 }
                                 else {
                                     arrayComentarios = element.comentario;
@@ -536,7 +536,6 @@ function imprimirComentario(e) {
         }
     })
 }
-
 //respuestas
 function formRespuesta(e) {
     nombreComent = e.target.parentNode.parentNode.parentNode.childNodes[0].textContent;
@@ -591,8 +590,9 @@ function addRespuestaComent(nombre, contenido) {
     })
     guardarZonas()
 }
-
 function imprimirRespuestas(e, divRespContainer, divComent, h3Respuesta) {
+    let sectionBusqueda = document.getElementById('sectionBusqueda');
+    sectionBusqueda.style = "display:none"
     let sectionForm = document.getElementById('sectionForm')
     sectionForm.style = "display:none;"
     let nombreComentario = e.target.parentNode.parentNode.parentNode.childNodes[0].textContent;
@@ -606,17 +606,14 @@ function imprimirRespuestas(e, divRespContainer, divComent, h3Respuesta) {
             arrayEspecies.forEach(element => {
                 if (element.especieName === nombreEspecie) {
                     if (element.animales === undefined) {
-                        false
                     }
                     else {
                         let arrayAnimales = element.animales;
                         arrayAnimales.forEach(element => {
                             let arrayComentarios = element.comentario
                             arrayComentarios.forEach(element => {
-
                                 if (element.nombreComentario === nombreComentario) {
                                     if (element.respuestas === undefined) {
-
                                     }
                                     else {
                                         arrayRespuestas = element.respuestas;
@@ -648,7 +645,6 @@ function imprimirRespuestas(e, divRespContainer, divComent, h3Respuesta) {
         }
     })
 }
-
 let validarArrays = [];
 //funtion validar
 function validarZona(nombreZona) {
@@ -663,7 +659,6 @@ function validarZona(nombreZona) {
         zonaValidadad = validarArrays.includes(nombreZona)
         console.log(zonaValidadad)
     }
-
 }
 function validarEspecies(nombreEspecie) {
     arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
@@ -687,11 +682,9 @@ function validarAnimales(nombreAnimal) {
     arrayZonas.forEach(element => {
         let arrayEspecies = element.especie;
         if (arrayEspecies === undefined) {
-
         } else {
             arrayEspecies.forEach(element => {
                 if (element.animales === undefined) {
-
                 }
                 else {
                     let arrayAnimal = element.animales;
@@ -703,7 +696,6 @@ function validarAnimales(nombreAnimal) {
                         }
                     });
                 }
-
             })
         }
     })
@@ -712,15 +704,24 @@ function validarAnimales(nombreAnimal) {
 }
 // buscador
 let arrayRecorridoBusq = [];
+let errorValid = false;
 let buscadorForm = document.getElementById('search')
 buscadorForm.addEventListener('submit', (e) => {
-    let datoBusqueda = document.getElementById('inputSearch').value;
     e.preventDefault()
-    buscador(datoBusqueda)
-    imprimirBusqueda()
+    let datoBusqueda = document.getElementById('inputSearch').value;
+    datoBusqueda = datoBusqueda.toLowerCase();
+    if ((/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(datoBusqueda)) && datoBusqueda.length >= 4) {
+        buscador(datoBusqueda)
+        imprimirBusqueda(datoBusqueda)
+        buscadorForm.reset()
+    }
+    else {
+        alert('!ERROR! revisa bien los campos a llenar')
+    }
 })
 function buscador(datoBusqueda) {
     arrayRecorridoBusq = [];
+    //zonas
     let arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
     arrayZonas.forEach(element => {
         if (element.Zona.includes(datoBusqueda)) {
@@ -728,8 +729,10 @@ function buscador(datoBusqueda) {
                 zona: element.Zona,
             }
             arrayRecorridoBusq.push(recorrido);
+            errorValid = true
         }
     })
+    //especies
     arrayZonas.forEach(element => {
         let zona = element.Zona
         if (element.especie === undefined) {
@@ -744,12 +747,12 @@ function buscador(datoBusqueda) {
                         especie: element.especieName,
                     }
                     arrayRecorridoBusq.push(recorrido);
+                    errorValid = true
                 }
-
             })
         }
-
     })
+    //animales
     arrayZonas.forEach(element => {
         let zona = element.Zona
         if (element.especie === undefined) {
@@ -772,6 +775,7 @@ function buscador(datoBusqueda) {
                                 animal: element.animalName,
                             }
                             arrayRecorridoBusq.push(recorrido);
+                            errorValid = true
                         }
                     })
                 }
@@ -779,6 +783,7 @@ function buscador(datoBusqueda) {
             })
         }
     })
+    //comentarios
     arrayZonas.forEach(element => {
         let zona = element.Zona
         if (element.especie === undefined) {
@@ -810,6 +815,7 @@ function buscador(datoBusqueda) {
                                         contenidoCome: element.contenidoComentario,
                                     }
                                     arrayRecorridoBusq.push(recorrido);
+                                    errorValid = true
                                 }
                             })
                         }
@@ -818,7 +824,7 @@ function buscador(datoBusqueda) {
             })
         }
     })
-
+    //respuestas
     arrayZonas.forEach(element => {
         let zona = element.Zona
         if (element.especie === undefined) {
@@ -861,6 +867,7 @@ function buscador(datoBusqueda) {
                                                 contenidoRespuesta: element.contenidoRespuesta,
                                             }
                                             arrayRecorridoBusq.push(recorrido);
+                                            errorValid = true
                                         }
                                     })
                                 }
@@ -872,10 +879,19 @@ function buscador(datoBusqueda) {
         }
     })
 }
-function imprimirBusqueda() {
+function imprimirBusqueda(datoBusqueda) {
+    let sectionForm = document.getElementById('sectionForm')
+    sectionForm.style = "display:none;"
+    let sectionListAnimales = document.getElementById('sectionListAnimales')
+    sectionListAnimales.style = "display:none"
+    let sectionMensajes = document.getElementById('sectionMensajes');
+    sectionMensajes.style = "display:none;"
+    let sectionListEspecies = document.getElementById('sectionListEspecies')
+    sectionListEspecies.style = "display:none"
+
     let sectionBusqueda = document.getElementById('sectionBusqueda');
-
-
+    sectionBusqueda.style = "display:block"
+    sectionBusqueda.innerHTML = ""
     arrayRecorridoBusq.forEach(element => {
         let nombreZona = document.createElement('p');
         let divZona = document.createElement('div')
@@ -883,6 +899,13 @@ function imprimirBusqueda() {
         let divEspecie = document.createElement('div')
         let divComentarios = document.createElement('div')
         let divRespuestas = document.createElement('div')
+
+        let h2Zona = document.createElement('h2')
+        let h2Especie = document.createElement('h2')
+        let h2Animal = document.createElement('h2')
+        let h2Comentario = document.createElement('h2')
+        let h2Respuesta = document.createElement('h2')
+
         //nombres
         let nombreEspecie = document.createElement('p');
         let nombreAnimal = document.createElement('p');
@@ -890,39 +913,71 @@ function imprimirBusqueda() {
         let nombreComentario = document.createElement('p');
         let nombreRespuesta = document.createElement('p');
         let contenidoRespuesta = document.createElement('p');
-
+        let divContainer = document.createElement('div')
         //clases contenedores
-        divZona.classname = "zonaBusq"
-        divEspecie.classname = "especieBusq"
+        divContainer.className = "lineaSeparadora"
+        divZona.className = "zonaBusq"
+        divEspecie.className = "especieBusq"
         divAnimal.className = "animalBusq"
-        divComentarios = "comentarioBusq"
-        divRespuestas = "respuestaBusq"
+        divComentarios.className = "comentarioBusq"
+        divRespuestas.className = "respuestaBusq"
         //conteido 
+        //h2
+        h2Zona.textContent = "Zona"
+        h2Especie.textContent = "Especie"
+        h2Animal.textContent = "Animal"
+        h2Comentario.textContent = "Comentario"
+        h2Respuesta.textContent = "Respuesta"
+        //
         nombreZona.textContent = element.zona
         nombreEspecie.textContent = element.especie
         nombreAnimal.textContent = element.animal
-        contenidoComentario.textContent = element.nombreCome
+        contenidoComentario.textContent = element.contenidoCome
         nombreComentario.textContent = element.nombreCome;
         nombreRespuesta.textContent = element.nombreRespuesta
         contenidoRespuesta.textContent = element.contenidoRespuesta;
         //inserciones 
-        sectionBusqueda.insertAdjacentElement('beforeend',divZona)
-        sectionBusqueda.insertAdjacentElement('beforeend',divEspecie)
-        sectionBusqueda.insertAdjacentElement('beforeend', divAnimal)
-        // sectionBusqueda.insertAdjacentElement('beforeend', divComentarios)
-        // sectionBusqueda.insertAdjacentElement('beforeend', divRespuestas)
-
-
-        divZona.insertAdjacentElement('beforeend',nombreZona)
-        divEspecie.insertAdjacentElement('beforeend',nombreEspecie)
-        divAnimal.insertAdjacentElement('beforeend', nombreAnimal)
-        // divComentarios.insertAdjacentElement('beforeend', nombreComentario)
-        // divComentarios.insertAdjacentElement('beforeend', contenidoComentario)
-        // divRespuestas.insertAdjacentElement('beforeend', nombreRespuesta)
-        // divRespuestas.insertAdjacentElement('beforeend', contenidoRespuesta)
-
-
+        sectionBusqueda.insertAdjacentElement('beforeend', divContainer)
+        if (element.zona !== undefined) {
+            divContainer.insertAdjacentElement('beforeend', divZona)
+            divZona.insertAdjacentElement('beforeend', h2Zona)
+            divZona.insertAdjacentElement('beforeend', nombreZona)
+        }
+        if (element.especie !== undefined) {
+            divContainer.insertAdjacentElement('beforeend', divEspecie)
+            divEspecie.insertAdjacentElement('beforeend', h2Especie)
+            divEspecie.insertAdjacentElement('beforeend', nombreEspecie)
+        }
+        if (element.animal !== undefined) {
+            divContainer.insertAdjacentElement('beforeend', divAnimal)
+            divAnimal.insertAdjacentElement('beforeend', h2Animal)
+            divAnimal.insertAdjacentElement('beforeend', nombreAnimal)
+        }
+        if (element.contenidoCome !== undefined || element.nombreCome) {
+            divContainer.insertAdjacentElement('beforeend', divComentarios)
+            divComentarios.insertAdjacentElement('beforeend', h2Comentario)
+            divComentarios.insertAdjacentElement('beforeend', nombreComentario)
+            divComentarios.insertAdjacentElement('beforeend', contenidoComentario)
+        }
+        if (element.nombreRespuesta !== undefined || element.contenidoRespuesta) {
+            divContainer.insertAdjacentElement('beforeend', divRespuestas)
+            divRespuestas.insertAdjacentElement('beforeend', h2Respuesta)
+            divRespuestas.insertAdjacentElement('beforeend', nombreRespuesta)
+            divRespuestas.insertAdjacentElement('beforeend', contenidoRespuesta)
+        }
     })
+    if (errorValid === false) {
+        errorBusqueda(datoBusqueda)
+    }
 
+}
+function errorBusqueda(dato) {
+    debugger
+    let sectionBusqueda = document.getElementById('sectionBusqueda');
+    sectionBusqueda.innerHTML = "";
+    sectionBusqueda.style = "display:block"
+    let textoError = document.createElement('p')
+    textoError.textContent = `!!ERROR!! no se encontro la palabra ${dato}`
+    sectionBusqueda.insertAdjacentElement('beforeend', textoError)
 }
 document.addEventListener('DOMContentLoaded', imprimirZonas)                        

@@ -12,7 +12,6 @@ body {
         "aside main";
     background-image: url(imgs/fondo2.jpg);
     background-repeat: no-repeat;
-
 }
 
 .titulosAnimalesEspecies {
@@ -68,9 +67,6 @@ body {
 
 /* main */
 /* div aside */
-.divAside {
-    width: 100%;
-}
 
 /* formulario Comentario */
 .sectionForm {
@@ -195,10 +191,16 @@ body {
 }
 
 /* section resultados busqueda */
+.resultadosBusqueda{
+    border-left: solid 2px white;
+    background-color: #212529;
+    color: white;
+}
 .zonaBusq {
     margin-left: 10px;
     display: flex;
     flex-direction: column;
+ 
 }
 
 .especieBusq {
@@ -215,4 +217,7 @@ body {
 
 .respuestaBusq {
     margin-left: 190px;
+}
+.lineaSeparadora{
+    border-bottom: solid 2px white;
 }

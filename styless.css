@@ -15,6 +15,10 @@ body {
 
 }
 
+.titulosAnimalesEspecies {
+    padding: 5px;
+}
+
 .iconHeader {
     width: 40px;
 }
@@ -33,7 +37,7 @@ body {
     grid-area: main;
     display: flex;
     flex-direction: column;
-    
+
 }
 
 .aside {
@@ -64,25 +68,29 @@ body {
 
 /* main */
 /* div aside */
-.divAside{
+.divAside {
     width: 100%;
 }
+
 /* formulario Comentario */
-.sectionForm{
+.sectionForm {
     display: none;
     padding-left: 10px;
     padding-top: 20px;
 }
-.divFormContainer{
+
+.divFormContainer {
     width: 80%;
     background-color: #1C6064;
 }
-.formulario  textarea {
+
+.formulario textarea {
     resize: none;
     min-height: 200px;
 }
+
 /* comentarios */
-.divComentario{
+.divComentario {
     margin-bottom: 10px;
     padding: 20px;
     border-radius: 20px;
@@ -90,72 +98,121 @@ body {
     min-height: 80px;
 
 }
-.sectionMensajes{
+
+.sectionMensajes {
     padding-top: 10px;
     display: flex;
     padding-left: 10px;
     flex-direction: column;
 }
+
 /* zonas */
-.ulZonas{
+.ulZonas {
     display: flex;
 }
-.btonZona{
+
+.btonZona {
     width: 50%;
     margin-top: 10px;
 }
-.ulAnimales{
+
+.ulAnimales {
     width: 100px;
 }
+
 /* listado especies */
-.sectionListEspecies{
+.sectionListEspecies {
     padding-left: 10px;
 }
-.listEspecies{
+
+.listEspecies {
     width: 250px;
     margin-top: 10px;
     height: fit-content;
 }
-.btonEspecie{
+
+.btonEspecie {
     background-color: #bed84b;
     border: solid 2px white;
     max-width: 40%;
     margin-top: 10px;
     margin-left: 10px;
 }
-.liEspecie{
+
+.liEspecie {
     display: flex;
     margin-bottom: 10px;
     padding: 10px;
     background-color: #d3ddef;
 }
+
 /* animales */
-.botonAnimalAdd{
+.botonAnimalAdd {
     background-color: #bed84b;
     border: solid 2px white;
     margin-right: 10px;
 }
-.botonVerAnimal{
+
+.botonVerAnimal {
     background-color: rgb(205, 129, 129);
     border: solid 2px white;
     color: white;
 }
+
 /* sectionAnimalEspecie */
-.sectionEspecieAnimal{
+.sectionEspecieAnimal {
     display: flex;
     flex-wrap: wrap;
 }
-.divBotonesComent{
+
+.divBotonesComent {
     display: flex;
-   justify-content: space-between;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
+
 /* boton comentarios */
-.botonVerRespuestas{
+.botonVerRespuestas {
     background-color: #212529;
     color: white;
     border-color: white;
 }
+
 /* respuestas */
-.respuestas{
-    display: none;
+.divRespuestaContainer {
+    background-color: #D3DDEF;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.divRespuesta {
+    background-color: #212529;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+/* section resultados busqueda */
+.zonaBusq {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.especieBusq {
+    margin-left: 40px;
+}
+
+.animalBusq {
+    margin-left: 90px;
+}
+
+.comentarioBusq {
+    margin-left: 130px;
+}
+
+.respuestaBusq {
+    margin-left: 190px;
 }

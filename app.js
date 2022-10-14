@@ -56,7 +56,7 @@ function submitForm(e) {
         let contenidoComentario = document.getElementById('inputContenidoMenj').value;
         nombreComentario = nombreComentario.toLowerCase();
         contenidoComentario = contenidoComentario.toLowerCase();
-        if (/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreComentario) && /\S/.test(contenidoComentario)&& nombreComentario.length >= 4 && contenidoComentario.length >= 4) {
+        if (/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreComentario) && /\S/.test(contenidoComentario) && nombreComentario.length >= 4 && contenidoComentario.length >= 4) {
             addComentario(nombreComentario, contenidoComentario)
             formularioMensaj.reset()
         }
@@ -86,7 +86,7 @@ function submitForm(e) {
     else if (cambioFormulario === enums.formEspecie) {
         let nombreEspecie = document.getElementById('inputNombreMenj').value;
         nombreEspecie = nombreEspecie.toLowerCase();
-        if ((/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreEspecie))&& nombreEspecie.length >= 4) {
+        if ((/^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/.test(nombreEspecie)) && nombreEspecie.length >= 4) {
             validarEspecies(nombreEspecie)
             if (zonaValidadad === false) {
                 agregarEspecies(nombreEspecie)
@@ -408,6 +408,11 @@ function imprimirAnimales(e) {
 }
 //comentarios
 function addComentario(nombreComent, contenidoComent) {
+    // hora y fecha
+    const date = new Date();
+    const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
+    const [hour, minutes] = [date.getHours(), date.getMinutes()];
+    
     let arrayComentarios = [];
     arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
     arrayZonas.forEach(element => {
@@ -426,6 +431,7 @@ function addComentario(nombreComent, contenidoComent) {
                                     let comentarioNew = {
                                         nombreComentario: nombreComent,
                                         contenidoComentario: contenidoComent,
+                                        hora: `fecha: ${month}-${day}-${year} hora: ${hour}:${minutes}`,
                                     }
                                     arrayComentarios.push(comentarioNew)
                                 }
@@ -434,6 +440,7 @@ function addComentario(nombreComent, contenidoComent) {
                                     let comentarioNew = {
                                         nombreComentario: nombreComent,
                                         contenidoComentario: contenidoComent,
+                                        hora: `fecha: ${month}-${day}-${year} hora: ${hour}:${minutes}`,
                                     }
                                     arrayComentarios.push(comentarioNew)
                                 }
@@ -500,6 +507,7 @@ function imprimirComentario(e) {
                                         let botonVerRespuesta = document.createElement('button');
                                         let divRespuestas = document.createElement('div');
                                         let h3Respuestacoment = document.createElement('h3');
+                                        let textHora = document.createElement('p');
                                         //insertar clases y ids
                                         divContainerMensaj.className = "text-bg-dark  divComentario"
                                         botonAddRespuesta.className = "btn btn-outline-light botonRespuesta";
@@ -515,12 +523,15 @@ function imprimirComentario(e) {
                                         textoMensaj.textContent = element.contenidoComentario;
                                         botonAddRespuesta.textContent = "Responder"
                                         botonVerRespuesta.textContent = ">"
+                                        textHora.textContent = element.hora
                                         //inserciones
                                         sectionComentario.insertAdjacentElement("beforeend", divContainerMensaj);
                                         divContainerMensaj.insertAdjacentElement('beforeend', h2Mensaj)
                                         divContainerMensaj.insertAdjacentElement('beforeend', textoMensaj)
                                         divContainerMensaj.insertAdjacentElement('beforeend', divBotones)
+                                        divContainerMensaj.insertAdjacentElement('beforeend', textHora)
                                         divContainerMensaj.insertAdjacentElement('beforeend', h3Respuestacoment)
+
                                         divBotones.insertAdjacentElement('beforeend', botonAddRespuesta)
                                         divBotones.insertAdjacentElement('beforeend', botonVerRespuesta)
                                         divBotones.insertAdjacentElement('beforeend', divBotoDrop)
@@ -551,6 +562,10 @@ function formRespuesta(e) {
     sectionForm.style = "display:flex;"
 }
 function addRespuestaComent(nombre, contenido) {
+    const date = new Date();
+    const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
+    const [hour, minutes] = [date.getHours(), date.getMinutes()];
+    let now = new Date();
     arrayZonas = JSON.parse(localStorage.getItem('Zonas'))
     let arrayRespuesta = [];
     arrayZonas.forEach(element => {
@@ -569,6 +584,7 @@ function addRespuestaComent(nombre, contenido) {
                                         let respuestaNew = {
                                             nombreRespuesta: nombre,
                                             contenidoRespuesta: contenido,
+                                            hora: `fecha: ${month}-${day}-${year} hora: ${hour}:${minutes}`,
                                         }
                                         arrayRespuesta.push(respuestaNew)
                                     }
@@ -577,6 +593,7 @@ function addRespuestaComent(nombre, contenido) {
                                         let respuestaNew = {
                                             nombreRespuesta: nombre,
                                             contenidoRespuesta: contenido,
+                                            hora: `fecha: ${month}-${day}-${year} hora: ${hour}:${minutes}`,
                                         }
                                         arrayRespuesta.push(respuestaNew)
                                     }
@@ -622,18 +639,20 @@ function imprimirRespuestas(e, divRespContainer, divComent, h3Respuesta) {
                                             let divRespuesta = document.createElement('div')
                                             let h2Respuesta = document.createElement('h2');
                                             let textContentResp = document.createElement('p');
+                                            let textHora = document.createElement('p');
                                             //contenido
                                             h2Respuesta.textContent = element.nombreRespuesta
                                             textContentResp.textContent = element.contenidoRespuesta;
                                             //clases
                                             divRespContainer.className = "divRespuestaContainer"
                                             divRespuesta.className = "divRespuesta"
-                                            textContentResp.classList
+                                            textHora.textContent = `hora y fecha: ${element.hora}`
                                             //inserciones
                                             divComent.insertAdjacentElement('beforeend', divRespContainer);
                                             divRespContainer.insertAdjacentElement('beforeend', divRespuesta)
                                             divRespuesta.insertAdjacentElement('beforeend', h2Respuesta);
                                             divRespuesta.insertAdjacentElement('beforeend', textContentResp);
+                                            divRespuesta.insertAdjacentElement('beforeend', textHora)
                                         })
                                     }
                                 }

@@ -203,10 +203,6 @@ body {
   margin: 5px 0px 0px 5px;
 }
 
-.divTxArea {
-  display: flex;
-}
-
 /* comentarios */
 .sectionMensajes {
   padding-top: 10px;
@@ -222,7 +218,9 @@ body {
 .displaygrid {
   display: grid;
 }
-
+.displayBlock{
+  display: block;
+}
 .displayFlex {
   display: flex;
 }
@@ -247,5 +245,9 @@ body {
   margin-bottom: 10px;
   padding: 10px;
   background-color: #d3ddef;
+}
+/* lista de animales */
+.listaAnimales{
+  margin-left: 10px;
 }
 
